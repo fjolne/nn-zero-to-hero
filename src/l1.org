@@ -1,0 +1,75 @@
+#+title: L1
+#+length: 2.5h
+#+spent: 8h
+#+hugo_base_dir: ~/src/fjolne
+
+* Andrej Karpathy, NN: From Zero to Hero, L1
+:PROPERTIES:
+:EXPORT_FILE_NAME: nn-from-zero-to-hero-l1
+:EXPORT_AUTHOR:
+:END:
+Attempt to translate the first lecture of Andrej's course
+into a self-study guide.
+#+hugo: more
+** Create Jupyter notebook
++ Install Jupyter: ~pip install jupyter~
++ Run Jupyter server: ~jupyter notebook~
+** Install and import prerequisites
++ Install: ~pip install numpy matplotlib torch~
++ Import:
+#+begin_src python
+import random
+import math
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+#+end_src
+** Create a Value abstraction with following properties
++ it should represent a float value
++ it should support addition and multiplication with other
+  Values, creating a new Value which stores the operation
+  and arguments used to create it
+** Visualize the resulting expression graph via GraphViz
++ Install: ~pip install graphviz~
++ Import: ~from graphviz import Digraph~
++ Get acquainted with core API:
+  + Constructor
+    #+begin_src python
+dot = Digraph(
+    format='svg', # for inline images
+    graph_attr={'rankdir': 'LR'}, # for left-to-right arrows
+)
+    #+end_src
+  + Node
+    #+begin_src python
+dot.node(
+    name, # unique node identifier
+    label=f'{{ x | {math.pi:.4f} }}', # contents of the node, format depends on the shape
+    shape='record', # shape of the nod
+)
+    #+end_src
+  + Edge
+    #+begin_src python
+dot.edge(
+    name_from,
+    name_to,
+)
+    #+end_src
++ Draw the graph where nodes are values and operations
+** Implement gradient calculation
++ gradient is a partial derivative of the final expr/node
+  with respect to the current expr/node
+  + gradient of the final node: ~dL/dL = 1~
+  + gradient of the final node child: ~dL/df~
+  + gradient of the some node (chain rule): ~dL/dx = dL/df * df/dx~
++ what are the gradients for a multiplication expr graph?
++ what are the gradients for an addition expr graph?
++ hint: in the parent define a backward() lambda which
+  computes grads of the children
++ hint: consider a case when some Value is used twice
+** Implement more operations
++ subtraction
++ power
++ division
++ exp
++ tanh
