@@ -1,0 +1,5 @@
+((org-mode . ((org-hugo-base-dir . "~/src/fjolne")
+              (org-hugo-auto-set-lastmod . t)
+              (org-export-with-author . nil)
+              (org-log-done . time)
+              (org-log-done-with-time . nil))))

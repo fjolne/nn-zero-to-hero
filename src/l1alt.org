@@ -1,12 +1,9 @@
-#+title: L1
 #+length: 2.5h
 #+spent: 8h
-#+hugo_base_dir: ~/src/fjolne
 
 * NN: From Zero to Hero, Lecture 1
 :PROPERTIES:
 :EXPORT_FILE_NAME: nn-from-zero-to-hero-l1
-:EXPORT_AUTHOR:
 :END:
 Attempt to translate the first lecture of
 [[https://github.com/karpathy/nn-zero-to-hero][Andrej Karpathy's course]] into a
@@ -60,7 +57,7 @@ dot.edge(
 
 ** Implement gradient calculation
 + gradient is a partial derivative of the final expression
-  with respect to the current expression $x=y$
+  with respect to the current expression
   #+begin_src python
 x = Value(1.0)
 y = Value(2.0)
@@ -69,8 +66,8 @@ u = x + y
 v = u * z
   #+end_src
 \begin{align}
-\text{grad}(v) = \frac{dv}{dv} &= 1\\
-\text{grad}(u) = \frac{dv}{du} &= \frac{d(u \cdot z)}{du}=z\\
+\text{grad}(v) = \frac{dv}{dv} &= 1\\\[5pt]
+\text{grad}(u) = \frac{dv}{du} &= \frac{d(u \cdot z)}{du}=z\\\[5pt]
 \text{grad}(x) = \frac{dv}{dx} &= \frac{dv}{du} \cdot \frac{du}{dx} = z \cdot \frac{d(x + y)}{dx} = z \cdot 1 = z
 \end{align}
 + implement ~backward()~ method which computes the gradients of the whole graph
