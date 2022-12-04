@@ -3,73 +3,107 @@
 #+spent: 8h
 #+hugo_base_dir: ~/src/fjolne
 
-* Andrej Karpathy, NN: From Zero to Hero, L1
+* NN: From Zero to Hero, Lecture 1
 :PROPERTIES:
 :EXPORT_FILE_NAME: nn-from-zero-to-hero-l1
 :EXPORT_AUTHOR:
 :END:
-Attempt to translate the first lecture of Andrej's course
-into a self-study guide.
+Attempt to translate the first lecture of
+[[https://github.com/karpathy/nn-zero-to-hero][Andrej Karpathy's course]] into a
+step-by-step guide where you're encouraged to come up with solutions on your
+own.
 #+hugo: more
 ** Create Jupyter notebook
-+ Install Jupyter: ~pip install jupyter~
-+ Run Jupyter server: ~jupyter notebook~
-** Install and import prerequisites
-+ Install: ~pip install numpy matplotlib torch~
-+ Import:
-#+begin_src python
-import random
-import math
-import numpy as np
-import matplotlib.pyplot as plt
-%matplotlib inline
-#+end_src
-** Create a Value abstraction with following properties
++ install Jupyter: ~pip install jupyter~
++ run Jupyter server: ~jupyter notebook~
+** Create Value abstraction
 + it should represent a float value
-+ it should support addition and multiplication with other
-  Values, creating a new Value which stores the operation
-  and arguments used to create it
++ it should support addition and multiplication with other Values
+  #+begin_src python
+x = Value(1.0)
+y = Value(2.0)
+z = Value(3.0)
+(x + y) * z # Value(9.0)
+  #+end_src
++ non-leaf values should store its operation and arguments
+  #+begin_src python
+x = Value(1.0)
+y = Value(2.0)
+z = x + y # Value(3.0, op=<addition>, args=<x and y>)
+  #+end_src
 ** Visualize the resulting expression graph via GraphViz
-+ Install: ~pip install graphviz~
-+ Import: ~from graphviz import Digraph~
-+ Get acquainted with core API:
-  + Constructor
++ install: ~pip install graphviz~
++ import: ~from graphviz import Digraph~
++ draw the expression graph using GraphViz API:
+  + create graph object
     #+begin_src python
-dot = Digraph(
-    format='svg', # for inline images
-    graph_attr={'rankdir': 'LR'}, # for left-to-right arrows
-)
+dot = Digraph()
     #+end_src
-  + Node
+  + add graph node
     #+begin_src python
 dot.node(
     name, # unique node identifier
-    label=f'{{ x | {math.pi:.4f} }}', # contents of the node, format depends on the shape
-    shape='record', # shape of the nod
+    label, # contents of the node, format depends on the shape
+    shape, # visual shape of the nod
 )
+# dot.node(name='a', label=f'{{ a | {a:.4f} }}', shape='record')
     #+end_src
-  + Edge
+  + add graph edge
     #+begin_src python
 dot.edge(
-    name_from,
-    name_to,
+    name_from, # source node name
+    name_to, # destination node name
 )
+# dot.edge('a', 'b')
     #+end_src
-+ Draw the graph where nodes are values and operations
++
+
 ** Implement gradient calculation
-+ gradient is a partial derivative of the final expr/node
-  with respect to the current expr/node
-  + gradient of the final node: ~dL/dL = 1~
-  + gradient of the final node child: ~dL/df~
-  + gradient of the some node (chain rule): ~dL/dx = dL/df * df/dx~
-+ what are the gradients for a multiplication expr graph?
-+ what are the gradients for an addition expr graph?
-+ hint: in the parent define a backward() lambda which
-  computes grads of the children
-+ hint: consider a case when some Value is used twice
++ gradient is a partial derivative of the final expression
+  with respect to the current expression $x=y$
+  #+begin_src python
+x = Value(1.0)
+y = Value(2.0)
+z = Value(3.0)
+u = x + y
+v = u * z
+  #+end_src
+\begin{align}
+\text{grad}(v) = \frac{dv}{dv} &= 1\\
+\text{grad}(u) = \frac{dv}{du} &= \frac{d(u \cdot z)}{du}=z\\
+\text{grad}(x) = \frac{dv}{dx} &= \frac{dv}{du} \cdot \frac{du}{dx} = z \cdot \frac{d(x + y)}{dx} = z \cdot 1 = z
+\end{align}
++ implement ~backward()~ method which computes the gradients of the whole graph
+  when called on the root node
++ hints:
+  + when creating a new Value as a result of some operation, define
+    ~self._backward~ lambda which updates gradients of the argument nodes
+  + consider a case when some Value is used twice
 ** Implement more operations
-+ subtraction
-+ power
-+ division
-+ exp
-+ tanh
++ subtraction: ~x - y = x + (y * -1)~
++ power: ~x**k~ where ~k~ is a constant (not a Value)
++ division: ~x/y = x * (y**-1)~
++ exp: ~x.exp()~
++ tanh: ~x.tanh()~
+** Construct and test expression graph for a single neuron
+#+begin_src python
+x1 = Value(2.0, label='x1')
+x2 = Value(0.0, label='x2')
+w1 = Value(-3.0, label='w1')
+w2 = Value(1.0, label='w2')
+b = Value(6.8814, label='b')
+x1w1 = x1 * w1; x1w1.label = 'x1*w1'
+x2w2 = x2 * w2; x2w2.label = 'x2*w2'
+x1w1x2w2 = x1w1 + x2w2; x1w1x2w2.label = 'x1*w1 + x2*w2'
+n = x1w1x2w2 + b; n.label = 'n'
+o = n.tanh(); o.label = 'o'
+o.backward()
+# ==== expected gradients ====
+# x1.grad = -1.5
+# w1.grad = 1.0
+# x2.grad = 0.5
+# w2.grad = 0.0
+#+end_src
+** Create Neuron abstraction
+** Create Layer abstraction
+** Create MLP (Multi-Layer Perceptron) abstraction
