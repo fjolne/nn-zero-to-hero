@@ -102,5 +102,23 @@ o.backward()
 # w2.grad = 0.0
 #+end_src
 ** Create Neuron abstraction
++ it is defined by a list of weights + bias
++ it is callable with a list of input values, producing a squashed output:
+  \[
+  neuron([x_1, \ldots, x_n]) = tanh(\sum{w_i x_i} + b)
+  \]
 ** Create Layer abstraction
++ it is defined by a list of neurons
++ it is callable with a list of inputs, producing a list of neuron outputs
 ** Create MLP (Multi-Layer Perceptron) abstraction
++ it is defined by a list of layers
++ it is callable with a list of inputs, producing a list of outputs of the last
+  layer
++ by providing only one neuron in the last layer we can treat MLP as a
+  binary classificator with classes ~-1.0~ and ~1.0~
+** Compose a loss function
++ it indicates how good the MLP prediction is
++ there could be different loss functions, e.g.
+\[
+loss(\{x_i^j \}) = \sum_j(y_{pred}^j - y_{gt}^j)^2
+\]

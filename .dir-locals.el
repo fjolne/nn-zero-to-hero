@@ -1,4 +1,4 @@
-((org-mode . ((org-hugo-base-dir . "~/src/fjolne")
+((org-mode . ((org-hugo-base-dir . "~/src/fjolne/journal")
               (org-hugo-auto-set-lastmod . t)
               (org-export-with-author . nil)
               (org-log-done . time)
