@@ -10,33 +10,48 @@ Attempt to translate the first lecture of
 step-by-step guide where you're encouraged to come up with solutions on your
 own.
 #+hugo: more
-** Create Jupyter notebook
+** Goals
++ learn what is neural network from first principles
++ understand how backward propagation in neural networks works
++ build and train a neural network as binary classificator from scratch
++ refine your Python and Jupyter skills
++ learn how PyTorch works under the hood
++ learn how to visualize data as graphs
+** Skills to be acquired
++ Data Visualization
+  + GraphViz
++ Neural Networks
+  + expression graph
+  + backpropagation
+  + PyTorch
+** Tasks
+*** Create Jupyter notebook
 + install Jupyter: ~pip install jupyter~
 + run Jupyter server: ~jupyter notebook~
-** Create Value abstraction
-+ it should represent a float value
-+ it should support addition and multiplication with other Values
+*** Create Value abstraction
++ it represents a float value
++ it supports addition and multiplication with other Values
   #+begin_src python
 x = Value(1.0)
 y = Value(2.0)
 z = Value(3.0)
 (x + y) * z # Value(9.0)
   #+end_src
-+ non-leaf values should store its operation and arguments
++ non-leaf values store its operation and arguments
   #+begin_src python
 x = Value(1.0)
 y = Value(2.0)
 z = x + y # Value(3.0, op=<addition>, args=<x and y>)
   #+end_src
-** Visualize the resulting expression graph via GraphViz
-+ install: ~pip install graphviz~
-+ import: ~from graphviz import Digraph~
-+ draw the expression graph using GraphViz API:
+*** Visualize the resulting expression graph
++ install GraphViz: ~pip install graphviz~
++ import relevant class: ~from graphviz import Digraph~
++ draw the expression graph:
   + create graph object
     #+begin_src python
 dot = Digraph()
     #+end_src
-  + add graph node
+  + add Value nodes to graph
     #+begin_src python
 dot.node(
     name, # unique node identifier
@@ -45,7 +60,7 @@ dot.node(
 )
 # dot.node(name='a', label=f'{{ a | {a:.4f} }}', shape='record')
     #+end_src
-  + add graph edge
+  + connect argument nodes to the output nodes
     #+begin_src python
 dot.edge(
     name_from, # source node name
@@ -53,9 +68,11 @@ dot.edge(
 )
 # dot.edge('a', 'b')
     #+end_src
-+
+  + 2 example outputs for ~(x + y) * z~
+  [[~/src/ml/nn-zero-to-hero/src/l1-simple-graph.svg]]
+  [[~/src/ml/nn-zero-to-hero/src/l1alt-simple-graph.svg]]
 
-** Implement gradient calculation
+*** Implement gradient calculation
 + gradient is a partial derivative of the final expression
   with respect to the current expression
   #+begin_src python
@@ -76,13 +93,13 @@ v = u * z
   + when creating a new Value as a result of some operation, define
     ~self._backward~ lambda which updates gradients of the argument nodes
   + consider a case when some Value is used twice
-** Implement more operations
+*** Implement more operations
 + subtraction: ~x - y = x + (y * -1)~
 + power: ~x**k~ where ~k~ is a constant (not a Value)
 + division: ~x/y = x * (y**-1)~
 + exp: ~x.exp()~
 + tanh: ~x.tanh()~
-** Construct and test expression graph for a single neuron
+*** Construct and test expression graph for a single neuron
 #+begin_src python
 x1 = Value(2.0, label='x1')
 x2 = Value(0.0, label='x2')
@@ -101,22 +118,22 @@ o.backward()
 # x2.grad = 0.5
 # w2.grad = 0.0
 #+end_src
-** Create Neuron abstraction
+*** Create Neuron abstraction
 + it is defined by a list of weights + bias
 + it is callable with a list of input values, producing a squashed output:
   \[
   neuron([x_1, \ldots, x_n]) = tanh(\sum{w_i x_i} + b)
   \]
-** Create Layer abstraction
+*** Create Layer abstraction
 + it is defined by a list of neurons
 + it is callable with a list of inputs, producing a list of neuron outputs
-** Create MLP (Multi-Layer Perceptron) abstraction
+*** Create MLP (Multi-Layer Perceptron) abstraction
 + it is defined by a list of layers
 + it is callable with a list of inputs, producing a list of outputs of the last
   layer
 + by providing only one neuron in the last layer we can treat MLP as a
   binary classificator with classes ~-1.0~ and ~1.0~
-** Compose a loss function
+*** Compose a loss function
 + it indicates how good the MLP prediction is
 + there could be different loss functions, e.g.
 \[
