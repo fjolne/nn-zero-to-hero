@@ -204,4 +204,6 @@ loss = \sum_j(y_{pred}^j - y_{gt}^j)^2
   + update MLP parameters
 + look at predicted values to see how close they got to the ground truth
 *** Conclusion
-+ you've just created, trained and used a real neural network!
++ you've just created, trained and used a real neural network
++ you can use it for many different tasks: predict housing prices, recognize
+  hand-written digits, etc
