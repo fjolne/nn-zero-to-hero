@@ -26,6 +26,11 @@ own.
   + backpropagation
   + PyTorch
 ** Tasks
+*** Install Python
++ install Miniconda3: https://docs.conda.io/en/latest/miniconda.html
++ create a project directory: ~mkdir my-project && cd my-project~
++ create local python environment: ~conda create --prefix ./envs~
++ activate it: ~conda activate ./envs~
 *** Create Jupyter notebook
 + install Jupyter: ~pip install jupyter~
 + run Jupyter server: ~jupyter notebook~
@@ -143,9 +148,7 @@ o.backward()
   \]
 + for convenience, if the last layer consists only of one neuron return it
   instead of a list
-# + by providing only one neuron in the last layer we can treat MLP as a
-#   binary classificator with classes ~-1.0~ and ~1.0~
-*** Create a test dataset
+*** Create a test dataset for binary classification
 + define some sample data, e.g.
   #+begin_src python
 # sets of inputs
@@ -166,8 +169,7 @@ ys_pred = [mlp(x) for x in xs]
   #+end_src
 *** Compute the loss
 + it indicates how good is the MLP prediction
-+ there are different loss functions, but we're gonna use
-  Mean Squared Error (MSE)
++ there are different loss functions, but we will use Mean Squared Error (MSE)
 \[
 loss = \sum_j(y_{pred}^j - y_{gt}^j)^2
 \]
@@ -192,6 +194,6 @@ for p in mlp.parameters():
   + compute the loss
   + backprop gradients from the loss
   + update MLP parameters
-+ print predicted values to see how close they got to the ground truth
++ look at predicted values to see how close they got to the ground truth
 *** Conclusion
-+ you've just created, trained and used a real neural network
++ you've just created, trained and used a real neural network!
