@@ -13,19 +13,30 @@ own.
 #+hugo: more
 ** Goals
 + learn what is neural network from first principles
-+ understand how backward propagation in neural networks works
++ learn what is backward propagation / gradient descent
 + build and train a neural network as binary classificator from scratch
 + refine your Python and Jupyter skills
 + learn how PyTorch works under the hood
 + learn how to visualize data as graphs
-** Skills to be acquired
-+ Data Visualization
-  + GraphViz
-+ Neural Networks
-  + expression graph
-  + backpropagation
-  + PyTorch
-** Tasks
+** Prerequisites
++ Basic Python
++ Basic calculus
+** Key terms
++ GraphViz
++ Jupyter
++ PyTorch
++ Python
++ backpropagation
++ binary classification
++ data science
++ data visualization
++ expression graph
++ gradient descent
++ machine learning
++ neural networks
+** Further reading
++ [[https://ruder.io/optimizing-gradient-descent/][An overview of gradient descent optimization algorithms]]
+** Steps
 *** Install Python
 + install Miniconda3: https://docs.conda.io/en/latest/miniconda.html
 + create a project directory: ~mkdir my-project && cd my-project~
@@ -175,17 +186,14 @@ loss = \sum_j(y_{pred}^j - y_{gt}^j)^2
 \]
 *** Update MLP parameters
 + add ~parameters()~ method to MLP which returns the list of all weights and biases
-+ compute the gradients starting from the loss:
-  #+begin_src python
-loss.backward()
-  #+end_src
-+ go through the list of parameters and nudge each of them in the opposite
-  direction to the gradient (thus decreasing the loss):
-  #+begin_src python
-rate = 0.001
-for p in mlp.parameters():
-    p.data += rate * -p.grad
-  #+end_src
++ compute the gradients starting from the loss
++ update parameters to decrease the loss
+  + hint: nudge in the opposite direction to the gradient
+    #+begin_src python
+  rate = 0.001
+  for p in mlp.parameters():
+      p.data += rate * -p.grad
+    #+end_src
 + compute the loss once again and see it getting smaller, which means
   predictions are getting closer to the ground truth
 *** Create a cycle: Prediction-Loss-Backprop-Update
